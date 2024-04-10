@@ -1,23 +1,19 @@
 import 'package:flutter/material.dart';
 
-class CounterProvider extends ChangeNotifier {
-  int counterValue;
-
-  CounterProvider({
-    this.counterValue = 0
-
-
-  });
-
-  increment() {
-    counterValue++;
+class CounterProvider with ChangeNotifier{
+  //----------->>value initialize <<-------------->>
+  int _value=1;
+  //----------->>get this use get <<-------------->>
+  int  get value =>_value;
+  
+//----------->>increment function <<-------------->>
+  increment(){
+    _value++;
     notifyListeners();
   }
-
-  drecremet() {
-    counterValue--;
+  //----------->>decrement function <<-------------->>
+  decrement(){
+    _value--;
     notifyListeners();
   }
-
-
 }
