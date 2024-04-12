@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:provider_counter_app/provider/provider.dart';
-import 'package:provider_counter_app/screen/favourite_screen.dart';
+import 'package:provider_counter_app/provider/theme_changer_provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -13,45 +12,37 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<FavouriteButtonProvider>(context,listen: false);
+    print("build");
+    final themeChanger=Provider.of<ThemeChangerProvider>(context,listen: false);
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Favourite button change on click"),
-        actions: [
-          //all favourite button screen
-          IconButton(onPressed: (){
-            Navigator.push(context, MaterialPageRoute(builder: (context)=>const FavouriteButtonScreen()));
-          }, icon: const Icon(Icons.favorite))
+        title: const Text("Theme Changer"),
+      ),
+      body: Column(
+        children: [
+          RadioListTile<ThemeMode>(
+              title:  const Text("Light Theme"),
+              value: ThemeMode.light,
+              groupValue:themeChanger.themeMode,
+              onChanged: (value) {
+                themeChanger.setTheme(ThemeMode.light);
+              }),
+          RadioListTile<ThemeMode>(
+              title:  const Text("Dark Theme"),
+              value: ThemeMode.dark,
+              groupValue:themeChanger.themeMode,
+              onChanged: (value) {
+                themeChanger.setTheme(ThemeMode.dark);
+              }),
+          RadioListTile<ThemeMode>(
+              title:  const Text("System Theme"),
+              value: ThemeMode.system,
+              groupValue:themeChanger.themeMode,
+              onChanged: (value) {
+                themeChanger.setTheme(ThemeMode.system);
+              })
         ],
       ),
-      body: ListView.builder(
-          itemCount: 10,
-          itemBuilder: (context, index) {
-            return ListTile(
-              onTap: (){
-                //----------->>condition check value add or not in listOfValue <<-------------->>
-                if(provider.listOfValue.contains(index)){
-                  //if already add value than remove this value form the index
-                  provider.removeValue(index);
-
-                }
-                //otherwise
-                else {
-                  //----------->>call provider for add value <<-------------->>
-                  provider.addValue(index);
-                }
-              },
-              leading: Text("list $index"),
-
-              trailing: Consumer<FavouriteButtonProvider>(
-                builder: (BuildContext context, value, Widget? child) {
-                  //----------->>condition check value ase kina oi list a thakle akta icon show korbe na hole arekta <<-------------->>
-                  return value.listOfValue.contains(index) ? const Icon(
-                      Icons.favorite) : const Icon(Icons.favorite_border_outlined);
-                },
-              ),
-            );
-          }),
     );
   }
 }
